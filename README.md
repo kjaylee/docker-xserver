@@ -16,3 +16,6 @@ Blog post -> https://realpython.com/blog/python/django-development-with-docker-c
 1. Start services - `docker-compose up -d`
 1. Create migrations - `docker-compose run web /usr/local/bin/python manage.py migrate`
 1. Grab IP - `docker-machine ip dev` - and view in your browser
+
+Add 
+- https://blog.syncano.io/configuring-running-django-celery-docker-containers-pt-1/

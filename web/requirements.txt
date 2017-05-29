@@ -1,4 +1,7 @@
-Django==1.8.1
+Django==1.9.1
 gunicorn==19.3.0
 psycopg2==2.6
 redis==2.10.3
+celery==3.1.20  
+djangorestframework==3.3.1  
+
