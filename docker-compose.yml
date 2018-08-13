@@ -14,11 +14,9 @@ services:
       # - /docker-volumes/etc/letsencrypt/live/api.pipln.com/fullchain.pem:/etc/letsencrypt/live/api.pipln.com/fullchain.pem
       # - /docker-volumes/etc/letsencrypt/live/api.pipln.com/privkey.pem:/etc/letsencrypt/live/api.pipln.com/privkey.pem
       #for certbot challenges
-      - /docker-volumes/data/letsencrypt:/data/letsencrypt
+      # - /docker-volumes/data/letsencrypt:/data/letsencrypt
     networks:
       - docker-network
-    command: ["nginx", "-g", "deamon", "on"]
-
 
 networks:
   docker-network:
