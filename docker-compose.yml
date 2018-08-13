@@ -17,7 +17,7 @@ services:
       - /docker-volumes/data/letsencrypt:/data/letsencrypt
     networks:
       - docker-network
-    command: ["deamon", "on"]
+    command: ["nginx", "-g", "deamon", "on"]
 
 
 networks:
