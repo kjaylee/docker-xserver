@@ -1,92 +1,17 @@
-version: '2'
+version: '3.3'
 
-services:  
-
-    # Django web server
-    web:
-        restart: always
-        build:
-            context: ./web
-            dockerfile: Dockerfile
-        expose:
-        - "8000"
-        links:
-        - postgres:postgres
-        - rabbit:rabbit
-        - redis:redis
-        volumes:
-        - ./web:/app
-        - ./web/static:/app/static
-        - ./web/media:/app/media
-        env_file: .env
-        command: /app/run_web.sh
-        #/usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000 --reload
-        depends_on:
-        - postgres
-    
-    # Celery worker
-    worker:
-        build:
-            context: ./web
-            dockerfile: Dockerfile
-        env_file: .env
-        command: /app/run_celery.sh
-        volumes:
-        - ./web:/app
-        - ./web/static:/app/static
-        - ./web/media:/app/media
-        links:
-        - postgres
-        - rabbit
-        - redis
-        depends_on:
-        - rabbit
-        
+services:
     nginx:
         restart: always
-        build:
-            context: ./nginx
-            dockerfile: Dockerfile
+        build: ./nginx
+        container_name: nginx
         ports:
-        - "80:80"
+        - 80:80
+        - 443:443
         volumes:
         - /app/static
         - /app/media
-        volumes_from:
-        - web
-        links:
-        - web:web
+        - certs:/etc/letsencrypt
+        - certs-data:/data/letsencrypt
 
-    postgres:
-        restart: always
-        hostname: postgres
-        image: postgres:latest
-        volumes_from:
-        - data
-        ports:
-        - "5432:5432"
-
-    redis:
-        restart: always
-        hostname: redis
-        image: redis:latest
-        ports:
-        - "6379:6379"
     
-    # RabbitMQ
-    rabbit:
-        restart: always
-        hostname: rabbit
-        env_file: .env
-        image: rabbitmq:latest
-        ports:
-          - "5672:5672"  # we forward this port because it's useful for debugging
-          - "15672:15672"  # here, we can access rabbitmq management plugin
-
-
-    data:
-        restart: always
-        image: postgres:latest
-        volumes:
-        - /var/lib/postgresql
-        command: "true"
